@@ -1,5 +1,7 @@
 # postcss-resolve-nested-selector
 
+[![Build Status](https://travis-ci.org/davidtheclark/postcss-resolve-nested-selector.svg?branch=master)](https://travis-ci.org/davidtheclark/postcss-resolve-nested-selector)
+
 Given a (nested) selector in a PostCSS AST, return an array of resolved selectors.
 
 Tested to work with the syntax of
@@ -20,15 +22,15 @@ For example, given this JS:
 ```js
 var resolvedNestedSelector = require('postcss-resolve-nested-selector');
 postcssRoot.eachRule(function(rule) {
-  var resolvedSelectors = rule.selectors.map(function(selector) {
-    return resolvedNestedSelector(selector, rule);
+  rule.selectors.forEach(function(selector) {
+    console.log(resolvedNestedSelector(selector, rule));
   });
 });
 ```
 
 And the following CSS:
 
-```css
+```scss
 .foo {
   .bar {
     color: pink;
@@ -45,7 +47,7 @@ This should log:
 
 Or with this CSS:
 
-```css
+```scss
 .foo {
   .bar &,
   a {
