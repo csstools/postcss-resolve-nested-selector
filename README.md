@@ -1,6 +1,13 @@
 # postcss-resolve-nested-selector
 
-Resolve a nested selector in a PostCSS AST.
+Given a (nested) selector in a PostCSS AST, return an array of resolved selectors.
+
+Tested to work with the syntax of
+[postcss-nested](https://github.com/postcss/postcss-nested)
+and [postcss-nesting](https://github.com/jonathantneal/postcss-nesting).
+Should also work with SCSS and Less syntax. If you'd like to help out by
+adding some automated tests for those, that'd be swell. In fact, if you'd
+like to add any automated tests, you are a winner!
 
 ## API
 
