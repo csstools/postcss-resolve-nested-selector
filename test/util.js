@@ -23,7 +23,7 @@ function postcssNestingResolve(code) {
   return actualResolvedSelector(postcssNesting(), code);
 }
 
-function expected(code) {
+function allExpected(code) {
   const codeWithoutAtNest = code.replace(/@nest /g, '/*@nest */');
   return postcss().process(codeWithoutAtNest).then(function(result) {
     var resolvedSelectors = [];
@@ -56,9 +56,33 @@ function expected(code) {
   });
 }
 
+function resolveChosenSelector(code, chosenSelector) {
+  return postcss().process(code).then(function(result) {
+    var chosenNode;
+    result.root.walk(function(node) {
+      if (node.type !== 'rule' && node.type !== 'atrule') return;
+      if (node.type === 'atrule' && node.name !== 'nest') return;
+
+      var selectors = (node.type === 'atrule')
+        ? node.params.split(',')
+        : node.selectors;
+
+      for (var i = 0, l = selectors.length; i < l; i++) {
+        if (selectors[i] === chosenSelector) {
+          chosenNode = node;
+          return false;
+        }
+      }
+    });
+    if (!chosenNode) throw new Error ('The chosen node was not discovered!');
+    return resolveNestedSelector(chosenSelector, chosenNode).sort();
+  });
+}
+
 module.exports = {
   actualResolvedSelector: actualResolvedSelector,
   postcssNestedResolve: postcssNestedResolve,
   postcssNestingResolve: postcssNestingResolve,
-  expected: expected,
+  allExpected: allExpected,
+  resolveChosenSelector: resolveChosenSelector,
 };
