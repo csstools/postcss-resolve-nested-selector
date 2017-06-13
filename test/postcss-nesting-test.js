@@ -140,3 +140,25 @@ test('postcss-nesting Test Case 6', async t => {
     ['a', 'a', 'a b', 'a b', 'a c'],
   );
 });
+
+test('postcss-nesting TestCase 7', async t => {
+  const code = `.de {
+    @nest
+    .cd:not(:hover, :focus) & {
+      & .fg {
+        color: red;
+      }
+    }
+  }`;
+  const postcssNestingResult = await util.postcssNestingResolve(code);
+  postcssNestingResult.sort();
+  const actual = await util.allExpected(code);
+  actual.sort();
+
+  t.deepEqual(postcssNestingResult, actual);
+  t.deepEqual(actual, [
+    '.cd:not(:hover, :focus) .de',
+    '.cd:not(:hover, :focus) .de .fg',
+    '.de'
+  ]);
+});
