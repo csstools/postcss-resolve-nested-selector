@@ -1,6 +1,6 @@
 {
   "name": "postcss-resolve-nested-selector",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Resolve a nested selector in a PostCSS AST",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   ],
   "devDependencies": {
     "ava": "^0.19.1",
-    "postcss": "5.0.16",
+    "postcss": "^6.0.0",
     "postcss-nested": "1.0.0",
     "postcss-nesting": "2.2.0"
   }
