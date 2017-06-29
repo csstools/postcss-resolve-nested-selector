@@ -30,8 +30,12 @@ function allExpected(code) {
     result.root.walk(function(node) {
       if (node.type !== 'rule' && node.type !== 'atrule') return;
 
-      const nodeContainsDeclChild = node.some(function(descendant) {
-        return descendant.type === 'decl';
+      let nodeContainsDeclChild = false;
+      node.walk(function(descendant) {
+        if (descendant.type === 'decl') {
+          nodeContainsDeclChild = true;
+          return false;
+        }
       });
 
       var nodeContainsBlockDescendant = false;
@@ -45,7 +49,17 @@ function allExpected(code) {
       if (node.type !== 'atrule' && !nodeContainsDeclChild && nodeContainsBlockDescendant) return;
       if (node.type === 'atrule' && !nodeContainsDeclChild) return;
 
-      var selectors = (node.type === 'atrule') ? ['&'] : node.selectors;
+      var selectors;
+      if (node.type === 'atrule') {
+        if (node.name === 'nest') {
+          selectors = postcss.list.comma(node.params);
+        } else {
+          selectors = ['&'];
+        }
+      } else {
+        selectors = node.selectors;
+      }
+
       selectors.forEach(function(selector) {
         resolvedSelectors = resolvedSelectors.concat(resolveNestedSelector(selector, node));
       });

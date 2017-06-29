@@ -1,3 +1,5 @@
+const postcss = require('postcss');
+
 module.exports = function resolveNestedSelector(selector, node) {
   var parent = node.parent;
   var parentIsNestAtRule = parent.type === 'atrule' && parent.name === 'nest';
@@ -6,11 +8,11 @@ module.exports = function resolveNestedSelector(selector, node) {
   if (parent.type !== 'rule' && !parentIsNestAtRule) return resolveNestedSelector(selector, parent);
 
   var parentSelectors = (parentIsNestAtRule)
-    ? parent.params.split(',').map(function(s) { return s.trim(); })
+    ? postcss.list.comma(parent.params)
     : parent.selectors;
 
   var resolvedSelectors = parentSelectors.reduce(function(result, parentSelector) {
-    if (selector.indexOf('&') !== -1) {
+    if (/&/.test(selector)) {
       var newlyResolvedSelectors = resolveNestedSelector(parentSelector, parent).map(function(resolvedParentSelector) {
         return selector.replace(/&/g, resolvedParentSelector);
       });
