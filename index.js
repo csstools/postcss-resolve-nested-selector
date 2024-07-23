@@ -6,13 +6,13 @@ module.exports = function resolveNestedSelector(selector, node) {
 	if (parent.type !== 'rule' && !parentIsNestAtRule) return resolveNestedSelector(selector, parent);
 
 	var parentSelectors = (parentIsNestAtRule)
-		? list(parent.params)
+		? split(parent.params, ',', false).map((x) => x.trim())
 		: parent.selectors;
 
 	var resolvedSelectors = parentSelectors.reduce(function(result, parentSelector) {
 		if (selector.indexOf('&') !== -1) {
 			var newlyResolvedSelectors = resolveNestedSelector(parentSelector, parent).map(function(resolvedParentSelector) {
-				return selector.replace(/&/g, resolvedParentSelector);
+				return split(selector, '&', true).join(resolvedParentSelector);
 			});
 			return result.concat(newlyResolvedSelectors);
 		}
@@ -24,17 +24,20 @@ module.exports = function resolveNestedSelector(selector, node) {
 	return resolvedSelectors;
 }
 
-// https://github.com/postcss/postcss/blob/main/lib/list.js#L1
-// We should not have `postcss` as a direct dependency so, we inline the same code here.
-function list(string) {
-	let array = []
-	let current = ''
-	let split = false
+function split(string, separator, splitFunctions) {
+	var blockPairs = {
+		'(': ')',
+		'[': ']',
+		'{': '}'
+	}
+	var array = []
+	var current = ''
+	var split = false
 
-	let func = 0
-	let inQuote = false
-	let prevQuote = ''
-	let escape = false
+	var blockClose = []
+	var inQuote = false
+	var prevQuote = ''
+	var escape = false
 
 	for (let letter of string) {
 		if (escape) {
@@ -48,16 +51,16 @@ function list(string) {
 		} else if (letter === '"' || letter === "'") {
 			inQuote = true
 			prevQuote = letter
-		} else if (letter === '(') {
-			func += 1
-		} else if (letter === ')') {
-			if (func > 0) func -= 1
-		} else if (func === 0) {
-			if (letter === ',') split = true
+		} else if (letter === '(' || letter === '[' || letter === '{') {
+			blockClose.push(blockPairs[letter])
+		} else if (letter === blockClose[blockClose.length - 1]) {
+			blockClose.pop()
+		} else if (blockClose.length === 0 || (splitFunctions && blockClose.every((x) => x === ')'))) {
+			if (letter === separator) split = true
 		}
 
 		if (split) {
-			if (current !== '') array.push(current.trim())
+			array.push(current)
 			current = ''
 			split = false
 		} else {
@@ -65,6 +68,6 @@ function list(string) {
 		}
 	}
 
-	if (current !== '') array.push(current.trim())
+	array.push(current)
 	return array
 }

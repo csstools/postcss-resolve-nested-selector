@@ -90,6 +90,48 @@ test(async t => {
 
 test(async t => {
 	const code = `.a {
+		@nest [a=,] & {
+			& .c {
+				color: red;
+			}
+		}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .c'),
+		['[a=,] .a .c'],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		@nest a \\, & {
+			& .c {
+				color: red;
+			}
+		}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .c'),
+		['a \\, .a .c'],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		@nest [a=","] & {
+			& .c {
+				color: red;
+			}
+		}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .c'),
+		['[a=","] .a .c'],
+	);
+});
+
+test(async t => {
+	const code = `.a {
 		@nest .b & , & .c , & .d & {
 			& .e {
 				color: red;
@@ -103,5 +145,41 @@ test(async t => {
 			'.a .d .a .e',
 			'.b .a .e'
 		],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		.b [c="&"] & {}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '.b [c="&"] &'),
+		[
+			'.b [c="&"] .a'
+		],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		.b [c=&] & {}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '.b [c=&] &'),
+		[
+			'.b [c=&] .a'
+		],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		.b \\& + & {
+			& .c {}
+		}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .c'),
+		['.b \\& + .a .c'],
 	);
 });
