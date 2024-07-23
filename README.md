@@ -1,6 +1,6 @@
 # postcss-resolve-nested-selector
 
-[![test](https://github.com/csstools/postcss-resolve-nested-selector/actions/workflows/test.yml/badge.svg)](https://github.com/csstools/postcss-resolve-nested-selector/actions/workflows/test.yml)
+[![test](https://github.com/csstools/postcss-resolve-nested-selector/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/csstools/postcss-resolve-nested-selector/actions/workflows/test.yml)
 
 Given a (nested) selector in a PostCSS AST, return an array of resolved selectors.
 
