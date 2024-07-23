@@ -57,3 +57,51 @@ test(async t => {
 		['.foo:hover > b', '.foo_bar > b'],
 	);
 });
+
+test(async t => {
+	const code = `.a { .b:is(:hover, :focus) & {} }`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '.b:is(:hover, :focus) &'),
+		['.b:is(:hover, :focus) .a'],
+	);
+});
+
+test(async t => {
+	const code = `.a { .b:is(:hover, :focus) & { & .c {} } }`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .c'),
+		['.b:is(:hover, :focus) .a .c'],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		@nest .b:not(:hover, :focus) & {
+			& .c {
+				color: red;
+			}
+		}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .c'),
+		['.b:not(:hover, :focus) .a .c'],
+	);
+});
+
+test(async t => {
+	const code = `.a {
+		@nest .b & , & .c , & .d & {
+			& .e {
+				color: red;
+			}
+		}
+	}`;
+	assert.deepEqual(
+		await util.resolveChosenSelector(code, '& .e'),
+		[
+			'.a .c .e',
+			'.a .d .a .e',
+			'.b .a .e'
+		],
+	);
+});
