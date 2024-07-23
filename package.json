@@ -20,8 +20,7 @@
 		"index.js"
 	],
 	"devDependencies": {
-		"postcss": "^6.0.0",
-		"postcss-nested": "1.0.0",
-		"postcss-nesting": "2.2.0"
+		"postcss": "^8.0.0",
+		"postcss-nested": "6.0.0"
 	}
 }

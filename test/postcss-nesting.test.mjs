@@ -8,12 +8,12 @@ test('postcss-nesting Test Case 1', async t => {
 	const code = `a, b {
 		color: white;
 
-		@nest & c, & d {
+		& c, & d {
 			color: blue;
 		}
 	}`;
 	assert.deepEqual(
-		await util.postcssNestingResolve(code),
+		await util.postcssNestedResolve(code),
 		await util.allExpected(code),
 	);
 	assert.deepEqual(
@@ -27,16 +27,16 @@ test('postcss-nesting Test Case 2', async t => {
 	const code = `a, b {
 		color: white;
 
-		@nest & c, & d {
+		& c, & d {
 			color: blue;
 
-			@nest & e, & f {
+			& e, & f {
 				color: black;
 			}
 		}
 	}`;
 	assert.deepEqual(
-		await util.postcssNestingResolve(code),
+		await util.postcssNestedResolve(code),
 		await util.allExpected(code),
 	);
 	assert.deepEqual(
@@ -50,12 +50,12 @@ test('postcss-nesting Test Case 3', async t => {
 	const code = `a, b {
 		color: red;
 
-		@nest & & {
+		& & {
 			color: white;
 		}
 	}`;
 	assert.deepEqual(
-		await util.postcssNestingResolve(code),
+		await util.postcssNestedResolve(code),
 		await util.allExpected(code),
 	);
 	assert.deepEqual(
@@ -73,7 +73,7 @@ test('postcss-nesting Test Case 4', async t => {
 		}
 	}`;
 	assert.deepEqual(
-		await util.postcssNestingResolve(code),
+		await util.postcssNestedResolve(code),
 		await util.allExpected(code),
 	);
 	assert.deepEqual(
@@ -86,7 +86,7 @@ test('postcss-nesting Test Case 5', async t => {
 	const code = `a {
 		color: red;
 
-		@nest & b {
+		& b {
 			color: white;
 
 			@media {
@@ -97,13 +97,13 @@ test('postcss-nesting Test Case 5', async t => {
 		@media {
 			color: black;
 
-			@nest & c {
+			& c {
 				color: yellow;
 			}
 		}
 	}`;
 	assert.deepEqual(
-		await util.postcssNestingResolve(code),
+		await util.postcssNestedResolve(code),
 		await util.allExpected(code),
 	);
 	assert.deepEqual(
@@ -133,7 +133,7 @@ test('postcss-nesting Test Case 6', async t => {
 		}
 	}`;
 	assert.deepEqual(
-		await util.postcssNestingResolve(code),
+		await util.postcssNestedResolve(code),
 		await util.allExpected(code),
 	);
 	assert.deepEqual(

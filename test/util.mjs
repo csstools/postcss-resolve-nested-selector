@@ -1,6 +1,5 @@
 import postcss from 'postcss';
 import postcssNested from 'postcss-nested';
-import postcssNesting from 'postcss-nesting';
 import resolveNestedSelector from '../index.js';
 
 function actualResolvedSelector(plugin, code) {
@@ -17,10 +16,6 @@ function actualResolvedSelector(plugin, code) {
 
 function postcssNestedResolve(code) {
 	return actualResolvedSelector(postcssNested(), code);
-}
-
-function postcssNestingResolve(code) {
-	return actualResolvedSelector(postcssNesting(), code);
 }
 
 function allExpected(code) {
@@ -82,7 +77,6 @@ function resolveChosenSelector(code, chosenSelector) {
 export default {
 	actualResolvedSelector: actualResolvedSelector,
 	postcssNestedResolve: postcssNestedResolve,
-	postcssNestingResolve: postcssNestingResolve,
 	allExpected: allExpected,
 	resolveChosenSelector: resolveChosenSelector,
 };
