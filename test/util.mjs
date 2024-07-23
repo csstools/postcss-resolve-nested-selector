@@ -1,7 +1,7 @@
-var postcss = require('postcss');
-var postcssNested = require('postcss-nested');
-var postcssNesting = require('postcss-nesting');
-var resolveNestedSelector = require('..');
+import postcss from 'postcss';
+import postcssNested from 'postcss-nested';
+import postcssNesting from 'postcss-nesting';
+import resolveNestedSelector from '../index.js';
 
 function actualResolvedSelector(plugin, code) {
 	return postcss(plugin).process(code).then(function(result) {
@@ -79,7 +79,7 @@ function resolveChosenSelector(code, chosenSelector) {
 	});
 }
 
-module.exports = {
+export default {
 	actualResolvedSelector: actualResolvedSelector,
 	postcssNestedResolve: postcssNestedResolve,
 	postcssNestingResolve: postcssNestingResolve,

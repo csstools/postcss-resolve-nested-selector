@@ -4,7 +4,7 @@
 	"description": "Resolve a nested selector in a PostCSS AST",
 	"main": "index.js",
 	"scripts": {
-		"test": "ava test/*-test.js"
+		"test": "node --test"
 	},
 	"contributors": [
 		{
@@ -20,7 +20,6 @@
 		"index.js"
 	],
 	"devDependencies": {
-		"ava": "^0.19.1",
 		"postcss": "^6.0.0",
 		"postcss-nested": "1.0.0",
 		"postcss-nesting": "2.2.0"
