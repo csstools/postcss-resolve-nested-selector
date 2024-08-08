@@ -24,50 +24,51 @@ module.exports = function resolveNestedSelector(selector, node) {
 	return resolvedSelectors;
 }
 
+var blockPairs = {
+	'(': ')',
+	'[': ']',
+	'{': '}'
+};
+
 function split(string, separator, splitFunctions) {
-	var blockPairs = {
-		'(': ')',
-		'[': ']',
-		'{': '}'
-	}
-	var array = []
-	var current = ''
-	var split = false
+	var array = [];
+	var current = '';
+	var split = false;
 
-	var blockClose = []
-	var inQuote = false
-	var prevQuote = ''
-	var escape = false
+	var blockClose = [];
+	var inQuote = false;
+	var prevQuote = '';
+	var escape = false;
 
-	for (let letter of string) {
+	for (var letter of string) {
 		if (escape) {
-			escape = false
+			escape = false;
 		} else if (letter === '\\') {
-			escape = true
+			escape = true;
 		} else if (inQuote) {
 			if (letter === prevQuote) {
-				inQuote = false
+				inQuote = false;
 			}
 		} else if (letter === '"' || letter === "'") {
-			inQuote = true
-			prevQuote = letter
+			inQuote = true;
+			prevQuote = letter;
 		} else if (letter === '(' || letter === '[' || letter === '{') {
-			blockClose.push(blockPairs[letter])
+			blockClose.push(blockPairs[letter]);
 		} else if (letter === blockClose[blockClose.length - 1]) {
-			blockClose.pop()
+			blockClose.pop();
 		} else if (blockClose.length === 0 || (splitFunctions && blockClose.every((x) => x === ')'))) {
-			if (letter === separator) split = true
+			if (letter === separator) split = true;
 		}
 
 		if (split) {
-			array.push(current)
-			current = ''
-			split = false
+			array.push(current);
+			current = '';
+			split = false;
 		} else {
-			current += letter
+			current += letter;
 		}
 	}
 
-	array.push(current)
-	return array
+	array.push(current);
+	return array;
 }
