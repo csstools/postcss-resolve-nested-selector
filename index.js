@@ -8,11 +8,12 @@ module.exports = function resolveNestedSelector(selector, node) {
 	var parentSelectors = (parentIsNestAtRule)
 		? split(parent.params, ',', false).map((x) => x.trim())
 		: parent.selectors;
+	var selectorParts = split(selector, '&', true);
 
 	var resolvedSelectors = parentSelectors.reduce(function(result, parentSelector) {
-		if (selector.indexOf('&') !== -1) {
+		if (selectorParts.length > 1) {
 			var newlyResolvedSelectors = resolveNestedSelector(parentSelector, parent).map(function(resolvedParentSelector) {
-				return split(selector, '&', true).join(resolvedParentSelector);
+				return selectorParts.join(resolvedParentSelector);
 			});
 			return result.concat(newlyResolvedSelectors);
 		}

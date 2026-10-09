@@ -2,6 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import util from './util.mjs';
 
+for (const selector of ['[data-label="&"]', String.raw`.\&`, ':is([data-label="&"])']) {
+	test(`preserves ancestor selectors when ${selector} has only literal ampersands`, async () => {
+		const code = `.outer { .parent { ${selector} { color: red } } }`;
+		assert.deepEqual(
+			await util.resolveChosenSelector(code, selector),
+			[`.outer .parent ${selector}`],
+		);
+	});
+}
+
 test(async t => {
 	const code = `a { b { top: 0; c { d {}}}}`;
 	assert.deepEqual(
