@@ -1,5 +1,9 @@
 # Changes to PostCSS Resolve Nested Selector
 
+### 0.1.7
+
+- preserve ancestor selectors when a selector contains only literal `&` (in strings, attributes or escaped)
+
 ### 0.1.6
 
 - add `CHANGELOG.md`
