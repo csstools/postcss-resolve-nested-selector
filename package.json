@@ -24,7 +24,7 @@
 	],
 	"devDependencies": {
 		"postcss": "^8.0.0",
-		"postcss-nested": "^6.0.0"
+		"postcss-nested": "^8.0.0"
 	},
 	"homepage": "https://github.com/csstools/postcss-resolve-nested-selector",
 	"repository": {
